@@ -1,0 +1,8 @@
+.deps/
+.lock
+artifacts/
+.DS_Store
+Thumbs.db
+
+.env
+*.txt
