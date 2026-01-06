@@ -1,0 +1,13 @@
+{
+  "name": "Banana Split",
+  "description": "A banana split is a decadent ice cream sundae featuring a split banana topped with scoops of vanilla, chocolate, and strawberry ice cream, drizzled with hot fudge sauce, and can be adorned with whipped cream, nuts, and maraschino cherries",
+  "image": "ipfs://bafybeibxespqh6wn23ew3isrq43jtlepoo4pre4olomikfoud7p2zccppa/0.png",
+  "animation_url": "ipfs://bafybeidqrok3mg22wlahzouguivofheq42v4sdi5b725jswkrx7ccde5fu/0.mp4",
+  "attributes": [
+    { "trait_type": "Flavor", "value": "Triple" },
+    { "trait_type": "Topping", "value": "Cherries" },
+    { "trait_type": "Cone", "value": "Dish" },
+    { "trait_type": "Frosting", "value": "Whipped Cream" },
+    { "trait_type": "Drizzle", "value": "None" }
+  ]
+}

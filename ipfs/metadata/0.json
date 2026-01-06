@@ -1,0 +1,13 @@
+{
+  "name": "Mint Chocolate Chip",
+  "description": "A crisp, waffle cone cradles a scoop of creamy, mint-flavored ice cream. Swirls of rich, dark chocolate chip peek through the pale green, adding a delightful contrast of texture and taste. The cool, refreshing mint is perfectly balanced by the sweet, indulgent chocolate, creating a harmonious flavor profile that's both satisfying and refreshing.",
+  "image": "ipfs://bafybeibxespqh6wn23ew3isrq43jtlepoo4pre4olomikfoud7p2zccppa/0.png",
+  "animation_url": "ipfs://bafybeidqrok3mg22wlahzouguivofheq42v4sdi5b725jswkrx7ccde5fu/0.mp4",
+  "attributes": [
+    { "trait_type": "Flavor", "value": "Mint" },
+    { "trait_type": "Topping", "value": "Chocolate Chip" },
+    { "trait_type": "Cone", "value": "Chocolate" },
+    { "trait_type": "Frosting", "value": "Chocolate" },
+    { "trait_type": "Drizzle", "value": "None" }
+  ]
+}

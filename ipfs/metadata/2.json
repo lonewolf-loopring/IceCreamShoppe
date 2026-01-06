@@ -1,0 +1,13 @@
+{
+  "name": "Turtle Sundae",
+  "description": "A decadent treat for the ultimate chocolate lover, the Turtle Sundae is a masterpiece of sweet indulgence. This cone features a generous scoop of rich, creamy ice cream, drizzled with warm, gooey caramel sauce and a hot fudge drizzle. This dessert is a delightful symphony of textures and flavors that will satisfy any craving.",
+  "image": "ipfs://bafybeibxespqh6wn23ew3isrq43jtlepoo4pre4olomikfoud7p2zccppa/0.png",
+  "animation_url": "ipfs://bafybeidqrok3mg22wlahzouguivofheq42v4sdi5b725jswkrx7ccde5fu/0.mp4",
+  "attributes": [
+    { "trait_type": "Flavor", "value": "Vanilla" },
+    { "trait_type": "Topping", "value": "Chocolate Chip" },
+    { "trait_type": "Cone", "value": "Vanilla" },
+    { "trait_type": "Frosting", "value": "Speckled" },
+    { "trait_type": "Drizzle", "value": "Caramel Fudge" }
+  ]
+}
