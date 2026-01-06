@@ -11,19 +11,42 @@ import {ERC2981} from "@openzeppelin/contracts/token/common/ERC2981.sol";
 
 contract IceCreamShoppe is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable, ERC1155Supply, ERC2981 {
 
+    string private _contractCID; // _contractURI
+    string private _baseCID; // _setURI
+
+    uint96 public constant ROYALTY_PERCENTAGE = 500; // 5% Hardcoded
+
     string public name = "Ice Cream Shoppe";
     string public symbol = "ICS";
 
-    constructor(address initialOwner)
-        ERC1155("https://myart.com/api/item/{id}.json")
-        Ownable(initialOwner)
+    constructor(address initialOwner, string memory initialContractCID, string memory initialBaseCID)
+        ERC1155("") // Handled by override below
+        Ownable(initialOwner) // Expected Format : Wallet Address of Contract / Vault Owner
 
     {
-        _setDefaultRoyalty(initialOwner, 500);
+        _contractCID = initialContractCID; // Expected Format : <Collection.json CID>
+        _baseCID = initialBaseCID; // Expected Format :<Metadata Folder CID>
+        _setDefaultRoyalty(initialOwner, ROYALTY_PERCENTAGE); // 5% H
     }
 
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
+    // ContractURI Block
+
+    function contractURI() public view returns (string memory) {
+        return string.concat("ipfs://", _contractCID);
+    }
+
+    function setContractCID(string memory newContractCID) public onlyOwner {
+        _contractCID = newContractCID;
+    }
+  
+    // setURI Block
+    
+    function uri(uint256 /* id */) public view override returns (string memory) {
+        return string.concat("ipfs://", _baseCID, "/{id}.json"); // Automatically builds: ipfs://<CID>/0.json
+    }
+
+    function setBaseCID(string memory newBaseCID) public onlyOwner {
+        _baseCID = newBaseCID;
     }
 
     function pause() public onlyOwner {
@@ -48,12 +71,10 @@ contract IceCreamShoppe is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable, E
         _mintBatch(to, ids, amounts, data);
     }
 
-    // This allows you to change the royalty percentage or receiver address later
-    function setDefaultRoyalty(address receiver, uint96 feeNumerator)
-        public
-        onlyOwner
-    {
-        _setDefaultRoyalty(receiver, feeNumerator);
+    // Allows changing the receiver address only; royalty % hardcoded
+    function updateRoyaltyVault(address newVault) public onlyOwner {
+        require(newVault != address(0), "Cannot send to zero address");
+        _setDefaultRoyalty(newVault, ROYALTY_PERCENTAGE);
     }
 
     // The following functions are overrides required by Solidity.

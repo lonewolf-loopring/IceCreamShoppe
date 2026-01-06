@@ -1,5 +1,8 @@
 .deps/
+ipfs/images/
+ipfs/video/
 .lock
+*.png
 artifacts/
 .DS_Store
 Thumbs.db
