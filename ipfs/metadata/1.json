@@ -1,8 +1,8 @@
 {
   "name": "Strawberry Swirl Ice Cream Cone",
   "description": "A strawberry swirl ice cream cone is a delightful treat featuring creamy vanilla ice cream swirled with bits of vibrant, tangy strawberry. The ice cream is served on a crispy waffle cone, providing a delicious contrast of textures and flavors. The combination of sweet vanilla and tart strawberry creates a refreshing and satisfying dessert that is perfect for any occasion.",
-  "image": "ipfs://bafybeibxespqh6wn23ew3isrq43jtlepoo4pre4olomikfoud7p2zccppa/0.png",
-  "animation_url": "ipfs://bafybeidqrok3mg22wlahzouguivofheq42v4sdi5b725jswkrx7ccde5fu/0.mp4",
+  "image": "ipfs://bafybeibxespqh6wn23ew3isrq43jtlepoo4pre4olomikfoud7p2zccppa/1.png",
+  "animation_url": "ipfs://bafybeidqrok3mg22wlahzouguivofheq42v4sdi5b725jswkrx7ccde5fu/1.mp4",
   "attributes": [
     { "trait_type": "Flavor", "value": "Strawberry" },
     { "trait_type": "Topping", "value": "None" },

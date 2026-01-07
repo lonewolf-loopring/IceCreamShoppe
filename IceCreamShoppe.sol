@@ -49,6 +49,24 @@ contract IceCreamShoppe is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable, E
         _baseCID = newBaseCID;
     }
 
+    // --- AIRDROP MINTS ---
+
+    /* Use this format for multiple lines; 100 addresses max (gas)
+
+    [
+    "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+    "0x1234567890abcdef1234567890abcdef12345678",
+    "0xabcdef1234567890abcdef1234567890abcdef12"
+    ]
+
+    */
+
+    function mintToMultipleWallets(address[] calldata accounts, uint256 id, uint256 amount, bytes calldata data) public onlyOwner {
+        for (uint256 i = 0; i < accounts.length; i++) {
+            _mint(accounts[i], id, amount, data);
+        }
+    }
+
     function pause() public onlyOwner {
         _pause();
     }
