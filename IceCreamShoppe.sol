@@ -26,14 +26,17 @@ contract IceCreamShoppeV2 is
 {
     // --- STORAGE (Maintain same order as V1 to avoid collisions) ---
     mapping(uint256 => string) private _tokenCIDs; 
-    string private _contractCID;
-    string private _baseCID; // Kept in storage to maintain alignment, even if unused
-    uint96 public constant ROYALTY_PERCENTAGE = 500; // 5%
-    string public name;
-    string public symbol;
+   
+    string private _contractCID; // Slot 0
+    string private _baseCID; // Slot 1
+    string public name; // Slot 2
+    string public symbol; // Slot 3
 
     // Reserved slots for future upgrades (like shiny borders/toppings)
     uint256[50] private __gap;
+
+    // Royalty 5%
+    uint96 public constant ROYALTY_PERCENTAGE = 500; // Slot 2
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {

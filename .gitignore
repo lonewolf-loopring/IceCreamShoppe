@@ -7,5 +7,6 @@ artifacts/
 .DS_Store
 Thumbs.db
 ContractAddre*.txt
+*flattened.sol
 .env
 *.txt
