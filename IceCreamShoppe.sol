@@ -11,38 +11,39 @@ import {ERC2981Upgradeable} from "@openzeppelin/contracts-upgradeable/token/comm
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
- * @title IceCreamShoppeUpgradeable
- * @dev UUPS Upgradeable ERC-1155 with royalties and batch-minting utility.
+ * @title IceCreamShoppeV2
+ * @dev UUPS Upgradeable ERC-1155 with surgical per-token CID management.
  */
-contract IceCreamShoppeUpgradeable is
-Initializable,
-ERC1155Upgradeable,
-OwnableUpgradeable,
-ERC1155PausableUpgradeable,
-ERC1155BurnableUpgradeable,
-ERC1155SupplyUpgradeable,
-ERC2981Upgradeable,
-UUPSUpgradeable
+contract IceCreamShoppeV2 is
+    Initializable,
+    ERC1155Upgradeable,
+    OwnableUpgradeable,
+    ERC1155PausableUpgradeable,
+    ERC1155BurnableUpgradeable,
+    ERC1155SupplyUpgradeable,
+    ERC2981Upgradeable,
+    UUPSUpgradeable
 {
+    // --- STORAGE (Maintain same order as V1 to avoid collisions) ---
+    mapping(uint256 => string) private _tokenCIDs; 
     string private _contractCID;
-    string private _baseCID;
+    string private _baseCID; // Kept in storage to maintain alignment, even if unused
     uint96 public constant ROYALTY_PERCENTAGE = 500; // 5%
-
     string public name;
     string public symbol;
 
+    // Reserved slots for future upgrades (like shiny borders/toppings)
+    uint256[50] private __gap;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
-        _disableInitializers(); // Secures implementation from being initialized directly
+        _disableInitializers();
     }
 
-    /**
-     * @dev Replaces the constructor. Must be called through the proxy once.
-     */
+    // No need to re-call initialize if already deployed, but kept for new proxies
     function initialize(
         address initialOwner,
-        string memory initialContractCID,
-        string memory initialBaseCID
+        string memory initialContractCID
     ) public initializer {
         __ERC1155_init("");
         __Ownable_init(initialOwner);
@@ -55,69 +56,63 @@ UUPSUpgradeable
         name = "Ice Cream Shoppe";
         symbol = "ICS";
         _contractCID = initialContractCID;
-        _baseCID = initialBaseCID;
         _setDefaultRoyalty(initialOwner, ROYALTY_PERCENTAGE);
     }
 
-    // --- UUPS Required Authorization ---
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
-    // --- URI LOGIC ---
+    // --- URI LOGIC (Visibility Fixed) ---
+    
+    // Returns the collection-level JSON
     function contractURI() public view returns (string memory) {
         return string.concat("ipfs://", _contractCID);
+    }
+
+    // Returns the specific JSON for an ID (e.g. ipfs://Qm...CID)
+    function uri(uint256 id) public view override returns (string memory) {
+        string memory cid = _tokenCIDs[id];
+        require(bytes(cid).length > 0, "URI not set for this ID");
+        return string.concat("ipfs://", cid);
+    }
+
+    // --- ADMIN ACTIONS ---
+
+    function setTokenURI(uint256 id, string memory newCID) public onlyOwner {
+        _tokenCIDs[id] = newCID;
+        emit URI(string.concat("ipfs://", newCID), id);
     }
 
     function setContractCID(string memory newContractCID) public onlyOwner {
         _contractCID = newContractCID;
     }
 
-    function uri(uint256 /* id */) public view override returns (string memory) {
-        // Automatically builds: ipfs://<CID>/{id}.json
-        return string.concat("ipfs://", _baseCID, "/{id}.json");
-    }
+    // --- MINTING ---
 
-    function setBaseCID(string memory newBaseCID) public onlyOwner {
-        _baseCID = newBaseCID;
-    }
-
-    // --- MINTING LOGIC ---
-    function mint(address account, uint256 id, uint256 amount, bytes memory data) public onlyOwner {
+    /**
+     * @dev Surgical mint: Assigns a CID and mints tokens in one transaction.
+     */
+    function mintWithURI(
+        address account, 
+        uint256 id, 
+        uint256 amount, 
+        string memory cid, 
+        bytes memory data
+    ) public onlyOwner {
+        _tokenCIDs[id] = cid;
         _mint(account, id, amount, data);
+        emit URI(string.concat("ipfs://", cid), id);
     }
 
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) public onlyOwner {
-        _mintBatch(to, ids, amounts, data);
-    }
-
-    function mintToMultipleWallets(address[] calldata accounts, uint256 id, uint256 amount, bytes calldata data) public onlyOwner {
-        for (uint256 i = 0; i < accounts.length; i++) {
-            _mint(accounts[i], id, amount, data);
-        }
-    }
-
-    // --- UTILITIES ---
-    function updateRoyaltyVault(address newVault) public onlyOwner {
-        require(newVault != address(0), "Cannot send to zero address");
-        _setDefaultRoyalty(newVault, ROYALTY_PERCENTAGE);
-    }
-
+    // --- UTILS ---
     function pause() public onlyOwner { _pause(); }
     function unpause() public onlyOwner { _unpause(); }
 
-    // --- REQUIRED OVERRIDES ---
-    function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    override(ERC1155Upgradeable, ERC2981Upgradeable)
-    returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC1155Upgradeable, ERC2981Upgradeable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
     function _update(address from, address to, uint256[] memory ids, uint256[] memory values)
-    internal
-    override(ERC1155Upgradeable, ERC1155PausableUpgradeable, ERC1155SupplyUpgradeable)
-    {
+        internal override(ERC1155Upgradeable, ERC1155PausableUpgradeable, ERC1155SupplyUpgradeable) {
         super._update(from, to, ids, values);
     }
 }

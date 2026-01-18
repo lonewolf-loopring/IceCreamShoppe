@@ -6,6 +6,6 @@ ipfs/video/
 artifacts/
 .DS_Store
 Thumbs.db
-
+ContractAddre*.txt
 .env
 *.txt
